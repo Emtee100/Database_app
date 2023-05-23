@@ -22,17 +22,42 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SafeArea(
-      child: SingleChildScrollView(
+      backgroundColor: Colors.grey.shade100,
+        body:
+      SingleChildScrollView(
         child: Column(
           children: [
             Container(
               height: 250,
               decoration:
-                  BoxDecoration(color: Color.fromARGB(218, 10, 52, 131)),
+                  const BoxDecoration(color: Color.fromARGB(255, 2, 29, 80)),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20.0),
+                    child: Text(
+                      "Sign in to your Account",
+                      style: GoogleFonts.poppins(
+                          fontSize: 35,
+                          color: Theme.of(context).colorScheme.onPrimary),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20.0),
+                    child: Text(
+                      "Log in to gain access",
+                      style: GoogleFonts.poppins(
+                          fontSize: 12,
+                          color: Theme.of(context).colorScheme.onPrimary),
+                    ),
+                  )
+                ],
+              ),
             ),
             const SizedBox(
-              height: 20.0,
+              height: 10.0,
             ),
             Form(
                 key: _loginFormKey,
@@ -43,11 +68,10 @@ class _LoginPageState extends State<LoginPage> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 20.0, vertical: 15.0),
                       child: TextFormField(
+                        style: GoogleFonts.poppins(),
                         keyboardType: TextInputType.emailAddress,
                         autofocus: true,
                         decoration: InputDecoration(
-                            focusColor:
-                                Theme.of(context).colorScheme.background,
                             labelText: "Email Address",
                             labelStyle: GoogleFonts.poppins(),
                             border: const OutlineInputBorder(
@@ -56,10 +80,11 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20.0, vertical: 15.0),
+                      padding: const EdgeInsets.only(
+                          left: 20.0, right: 20.0, top: 15.0),
                       child: TextFormField(
                         obscureText: true,
+                        style: GoogleFonts.poppins(),
                         decoration: InputDecoration(
                             focusColor:
                                 Theme.of(context).colorScheme.inversePrimary,
@@ -75,33 +100,30 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
 
-                    // Padding(
-                    //   padding: const EdgeInsets.only(right: 20.0),
-                    //   child:
-                    TextButton(
-                        onPressed: () => print("hi"),
-                        child: Text(
-                          "Forgot Password?",
-                          style: GoogleFonts.poppins(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .primaryContainer),
-                        )),
-
-                    //   ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 10.0),
+                      child: TextButton(
+                          onPressed: () => print("hi"),
+                          child: Text(
+                            "Forgot Password?",
+                            style: GoogleFonts.poppins(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .inversePrimary),
+                          )),
+                    ),
 
                     //const SizedBox(height: 30.0,),
 
                     //Login Button
 
                     Container(
-                      margin: EdgeInsets.symmetric(horizontal: 20.0),
+                      margin: const EdgeInsets.symmetric(horizontal: 20.0),
                       padding: const EdgeInsets.symmetric(
                           horizontal: 130.0, vertical: 18.0),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                          color:
-                              Theme.of(context).colorScheme.primaryContainer),
+                          color: Theme.of(context).colorScheme.inversePrimary),
                       child: Text(
                         "Login",
                         style: GoogleFonts.poppins(
@@ -112,13 +134,11 @@ class _LoginPageState extends State<LoginPage> {
                             fontSize: 20.0),
                       ),
                     ),
-
-                    
                   ],
                 ))
           ],
         ),
       ),
-    ));
+    );
   }
 }
