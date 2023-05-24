@@ -23,14 +23,13 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
-        body:
-      SingleChildScrollView(
+      body: SingleChildScrollView(
         child: Column(
           children: [
             Container(
               height: 250,
               decoration:
-                  const BoxDecoration(color: Color.fromARGB(255, 2, 29, 80)),
+                  const BoxDecoration(color: Color.fromARGB(255, 4, 19, 48)),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -47,7 +46,7 @@ class _LoginPageState extends State<LoginPage> {
                   Padding(
                     padding: const EdgeInsets.only(left: 20.0),
                     child: Text(
-                      "Log in to gain access",
+                      "Sign in to your Account",
                       style: GoogleFonts.poppins(
                           fontSize: 12,
                           color: Theme.of(context).colorScheme.onPrimary),
@@ -107,9 +106,7 @@ class _LoginPageState extends State<LoginPage> {
                           child: Text(
                             "Forgot Password?",
                             style: GoogleFonts.poppins(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .inversePrimary),
+                                color: Theme.of(context).colorScheme.primary),
                           )),
                     ),
 
@@ -123,7 +120,7 @@ class _LoginPageState extends State<LoginPage> {
                           horizontal: 130.0, vertical: 18.0),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                          color: Theme.of(context).colorScheme.inversePrimary),
+                          color: Color.fromARGB(244, 59, 245, 83)),
                       child: Text(
                         "Login",
                         style: GoogleFonts.poppins(
@@ -134,6 +131,95 @@ class _LoginPageState extends State<LoginPage> {
                             fontSize: 20.0),
                       ),
                     ),
+
+                    const SizedBox(
+                      height: 15.0,
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      child: Row(children: [
+                        const Expanded(child: Divider()),
+                        const SizedBox(
+                          width: 20.0,
+                        ),
+                        Text(
+                          "Or login with",
+                          style: GoogleFonts.poppins(),
+                        ),
+                        const SizedBox(
+                          width: 20.0,
+                        ),
+                        const Expanded(child: Divider()),
+                      ]),
+                    ),
+
+                    const SizedBox(
+                      height: 15.0,
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 22.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 30.0, vertical: 10),
+                            decoration: BoxDecoration(
+                                border: Border.all(),
+                                borderRadius: BorderRadius.circular(10)),
+                            child: Row(children: [
+                              Image.asset(
+                                "assets/icons8-google-48.png",
+                                height: 15,
+                                width: 15,
+                              ),
+                              const SizedBox(
+                                width: 7.0,
+                              ),
+                              Text(
+                                "Google",
+                                style: GoogleFonts.poppins(fontSize: 15),
+                              )
+                            ]),
+                          ),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 25.0, vertical: 10),
+                            decoration: BoxDecoration(
+                                border: Border.all(),
+                                borderRadius: BorderRadius.circular(10)),
+                            child: Row(
+                                //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Image.asset(
+                                    "assets/icons8-facebook-48.png",
+                                    height: 20,
+                                    width: 20,
+                                  ),
+                                  const SizedBox(
+                                    width: 7.0,
+                                  ),
+                                  Text(
+                                    "Facebook",
+                                    style: GoogleFonts.poppins(fontSize: 15),
+                                  )
+                                ]),
+                          )
+                        ],
+                      ),
+                    ), 
+
+                    const SizedBox(height: 40.0,),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("Don't have an account?",style: GoogleFonts.poppins(),),
+                        Text("Register", style: GoogleFonts.poppins(color: Theme.of(context).colorScheme.primary),)
+                      ],
+                    )
                   ],
                 ))
           ],
