@@ -1,5 +1,6 @@
 // ignore_for_file: camel_case_types
 
+import 'package:database/signupPage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -24,6 +25,7 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       body: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
         child: Column(
           children: [
             Container(
@@ -117,7 +119,7 @@ class _LoginPageState extends State<LoginPage> {
                     Container(
                       margin: const EdgeInsets.symmetric(horizontal: 20.0),
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 130.0, vertical: 18.0),
+                          horizontal: 132.0, vertical: 18.0),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           color: Color.fromARGB(244, 59, 245, 83)),
@@ -180,7 +182,10 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                               Text(
                                 "Google",
-                                style: GoogleFonts.poppins(fontSize: 15),
+                                style: GoogleFonts.poppins(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.grey.shade700),
                               )
                             ]),
                           ),
@@ -201,23 +206,38 @@ class _LoginPageState extends State<LoginPage> {
                                   const SizedBox(
                                     width: 7.0,
                                   ),
-                                  Text(
-                                    "Facebook",
-                                    style: GoogleFonts.poppins(fontSize: 15),
-                                  )
+                                  Text("Facebook",
+                                      style: GoogleFonts.poppins(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.grey.shade700))
                                 ]),
                           )
                         ],
                       ),
-                    ), 
+                    ),
 
-                    const SizedBox(height: 40.0,),
+                    const SizedBox(
+                      height: 40.0,
+                    ),
 
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("Don't have an account?",style: GoogleFonts.poppins(),),
-                        Text("Register", style: GoogleFonts.poppins(color: Theme.of(context).colorScheme.primary),)
+                        Text(
+                          "Don't have an account?",
+                          style:
+                              GoogleFonts.poppins(color: Colors.grey.shade700),
+                        ),
+                        GestureDetector(
+                          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const SignUpForm())),
+                          child: Text(
+                            "Register",
+                            style: GoogleFonts.poppins(
+                                color: Theme.of(context).colorScheme.primary,
+                                fontWeight: FontWeight.w600),
+                          ),
+                        )
                       ],
                     )
                   ],
