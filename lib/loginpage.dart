@@ -13,19 +13,34 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   late final GlobalKey<FormState> _loginFormKey;
-
+  late final TextEditingController _emailController;
+  late final FocusNode _loginFocusNode;
+  late final TextEditingController _passwordController;
   @override
   void initState() {
+    _emailController = TextEditingController();
+    _loginFocusNode = FocusNode();
+    _passwordController = TextEditingController();
     _loginFormKey = GlobalKey();
     super.initState();
   }
+
+  @override
+  void dispose() {
+    _loginFocusNode.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  bool isVisible = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       body: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         child: Column(
           children: [
             Container(
@@ -69,6 +84,14 @@ class _LoginPageState extends State<LoginPage> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 20.0, vertical: 15.0),
                       child: TextFormField(
+                        controller: _emailController,
+                        onEditingComplete: () => _loginFocusNode.requestFocus(),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Please enter an email address";
+                          }
+                          return null;
+                        },
                         style: GoogleFonts.poppins(),
                         keyboardType: TextInputType.emailAddress,
                         autofocus: true,
@@ -84,7 +107,16 @@ class _LoginPageState extends State<LoginPage> {
                       padding: const EdgeInsets.only(
                           left: 20.0, right: 20.0, top: 15.0),
                       child: TextFormField(
-                        obscureText: true,
+                        onEditingComplete: () => _loginFocusNode.unfocus(),
+                        focusNode: _loginFocusNode,
+                        controller: _passwordController,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Please a password";
+                          }
+                          return null;
+                        },
+                        obscureText: isVisible ? false : true,
                         style: GoogleFonts.poppins(),
                         decoration: InputDecoration(
                             focusColor:
@@ -92,9 +124,16 @@ class _LoginPageState extends State<LoginPage> {
                             labelText: "Password",
                             labelStyle: GoogleFonts.poppins(),
                             suffixIconColor: Colors.black,
-                            suffixIcon: const IconButton(
-                                onPressed: null,
-                                icon: Icon(Icons.visibility_off_outlined)),
+                            suffixIcon: IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    isVisible = !isVisible;
+                                  });
+                                },
+                                icon: isVisible
+                                    ? const Icon(Icons.visibility_rounded)
+                                    : const Icon(
+                                        Icons.visibility_off_outlined)),
                             border: const OutlineInputBorder(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10)))),
@@ -116,21 +155,28 @@ class _LoginPageState extends State<LoginPage> {
 
                     //Login Button
 
-                    Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 20.0),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 132.0, vertical: 18.0),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Color.fromARGB(244, 59, 245, 83)),
-                      child: Text(
-                        "Login",
-                        style: GoogleFonts.poppins(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onPrimaryContainer,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 20.0),
+                    GestureDetector(
+                      onTap: () {
+                        if (_loginFormKey.currentState!.validate()) {
+                          _loginFocusNode.unfocus();
+                        }
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 20.0),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 132.0, vertical: 18.0),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: const Color.fromARGB(244, 59, 245, 83)),
+                        child: Text(
+                          "Login",
+                          style: GoogleFonts.poppins(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onPrimaryContainer,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 20.0),
+                        ),
                       ),
                     ),
 
@@ -230,7 +276,10 @@ class _LoginPageState extends State<LoginPage> {
                               GoogleFonts.poppins(color: Colors.grey.shade700),
                         ),
                         GestureDetector(
-                          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const SignUpForm())),
+                          onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const SignUpForm())),
                           child: Text(
                             "Register",
                             style: GoogleFonts.poppins(
