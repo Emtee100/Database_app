@@ -1,6 +1,6 @@
+import 'package:database/landingpage.dart';
 import 'package:flutter/material.dart';
 
-import 'loginpage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,6 +20,6 @@ class MyApp extends StatelessWidget {
               ColorScheme.fromSeed(seedColor: Colors.green),
           useMaterial3: true,
         ),
-        home: const LoginPage());
+        home: const LandingPage());
   }
 }

@@ -1,6 +1,7 @@
 // ignore_for_file: camel_case_types
 
 import 'package:database/signupPage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -34,6 +35,37 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   bool isVisible = false;
+
+  // these values of the below variables are going to be set by the emailSignin function and they will be fed to the errormessage of textfields
+
+  late String _emailErrorCode;
+  late String _passwordErrorCode;
+  late String _invalidEmailErrorCode;
+
+  // the boolean variable is for switching between the _emailErrorCode and _invalidEmailErrorCode
+
+  bool _errorText = false;
+
+  Future<dynamic> emailSignIn() async {
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: _emailController.text, password: _passwordController.text);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        setState(() {
+          _errorText = false;
+        });
+        _emailErrorCode = "Cannot find user";
+      } else if (e.code == 'wrong-password') {
+        _passwordErrorCode = "Wrong password";
+      } else if (e.code == 'invalid-email') {
+        setState(() {
+          _errorText = true;
+        });
+        _invalidEmailErrorCode = 'Email entered is not a valid email';
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -96,6 +128,9 @@ class _LoginPageState extends State<LoginPage> {
                         keyboardType: TextInputType.emailAddress,
                         autofocus: true,
                         decoration: InputDecoration(
+                            errorText: _errorText
+                                ? _invalidEmailErrorCode
+                                : _emailErrorCode,
                             labelText: "Email Address",
                             labelStyle: GoogleFonts.poppins(),
                             border: const OutlineInputBorder(
@@ -122,6 +157,7 @@ class _LoginPageState extends State<LoginPage> {
                             focusColor:
                                 Theme.of(context).colorScheme.inversePrimary,
                             labelText: "Password",
+                            errorText: _passwordErrorCode,
                             labelStyle: GoogleFonts.poppins(),
                             suffixIconColor: Colors.black,
                             suffixIcon: IconButton(
@@ -159,6 +195,7 @@ class _LoginPageState extends State<LoginPage> {
                       onTap: () {
                         if (_loginFormKey.currentState!.validate()) {
                           _loginFocusNode.unfocus();
+                          emailSignIn();
                         }
                       },
                       child: Container(
