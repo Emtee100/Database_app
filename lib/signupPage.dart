@@ -1,4 +1,5 @@
 import 'package:database/loginpage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -45,6 +46,27 @@ class _SignUpFormState extends State<SignUpForm> {
 
   bool isPasswordVisible = false;
   bool isRepeatPasswordVisible = false;
+  bool _weakPassword = false;
+  bool emailUsed = false;
+  bool _invalidEmail =false;
+  createUser()async{
+
+    try{
+      UserCredential user =await FirebaseAuth.instance.createUserWithEmailAndPassword(email: _emailController.text, password: _passwordController.text);
+      await FirebaseAuth.instance.signInWithEmailAndPassword(email: _emailController.text, password: _passwordController.text);
+    } on FirebaseAuthException catch(e){
+      if(e.code == 'weak-password'){
+setState(() {
+  _weakPassword = !_weakPassword;
+});
+      }else if(e.code == 'invalid-email'){
+setState(() {
+  _invalidEmail = !_invalidEmail;
+});
+      }
+    }
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -144,6 +166,7 @@ class _SignUpFormState extends State<SignUpForm> {
                             keyboardType: TextInputType.emailAddress,
                             style: GoogleFonts.poppins(),
                             decoration: InputDecoration(
+                              errorText: _invalidEmail?'This is an invalid Email':null,
                                 focusColor: Theme.of(context)
                                     .colorScheme
                                     .inversePrimary,
@@ -174,6 +197,8 @@ class _SignUpFormState extends State<SignUpForm> {
                             obscureText: isPasswordVisible? false :true,
                             style: GoogleFonts.poppins(),
                             decoration: InputDecoration(
+                              errorStyle: GoogleFonts.poppins(),
+                              errorText: _weakPassword?'Weak password':null,
                                 focusColor: Theme.of(context)
                                     .colorScheme
                                     .inversePrimary,
@@ -234,7 +259,9 @@ class _SignUpFormState extends State<SignUpForm> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            if (_signUpFormKey.currentState!.validate()) {}
+                            if (_signUpFormKey.currentState!.validate()) {
+                              createUser();
+                            }
                           },
                           child: Container(
                             margin:
