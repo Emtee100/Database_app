@@ -4,6 +4,7 @@ import 'package:database/signupPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -38,31 +39,72 @@ class _LoginPageState extends State<LoginPage> {
 
   // these values of the below variables are going to be set by the emailSignin function and they will be fed to the errormessage of textfields
 
-  late String _emailErrorCode;
-  late String _passwordErrorCode;
-  late String _invalidEmailErrorCode;
-
   // the boolean variable is for switching between the _emailErrorCode and _invalidEmailErrorCode
 
-  bool _errorText = false;
+  bool _errorText =false;
+  bool _passwordError = false;
+
+  Future<UserCredential> signInWithGoogle() async {
+    showDialog(
+        barrierColor: Colors.black26,
+        context: context,
+        builder: (context) => Center(
+              child: CircularProgressIndicator(
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ));
+            
+    //Triger authentication flow i.e showing list of google accounts and store the data about that account into the variable
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    //get the authentication tokens from the account and store them in the googleAuth runtime constant(final)
+    final GoogleSignInAuthentication? googleAuth =
+        await googleUser?.authentication;
+
+    //create a credential
+    final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken, idToken: googleAuth?.idToken);
+
+    if (context.mounted) {
+      Navigator.pop(context);
+    }
+
+    return await FirebaseAuth.instance.signInWithCredential(credential);
+  }
 
   Future<dynamic> emailSignIn() async {
     try {
+      showDialog(
+        barrierColor: Colors.black26,
+        barrierDismissible: false,
+        context: context, builder: (context) => Center(child: CircularProgressIndicator(color: Theme.of(context).colorScheme.primary,),));
       await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: _emailController.text, password: _passwordController.text);
+      if(context.mounted){
+        Navigator.pop(context);
+      }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         setState(() {
           _errorText = false;
         });
-        _emailErrorCode = "Cannot find user";
+        if(context.mounted){
+        Navigator.pop(context);
+      }
       } else if (e.code == 'wrong-password') {
-        _passwordErrorCode = "Wrong password";
+        setState(() {
+          _passwordError = true;
+        });
+        if(context.mounted){
+        Navigator.pop(context);
+      }
       } else if (e.code == 'invalid-email') {
         setState(() {
           _errorText = true;
         });
-        _invalidEmailErrorCode = 'Email entered is not a valid email';
+        if(context.mounted){
+        Navigator.pop(context);
+      }
       }
     }
   }
@@ -129,8 +171,8 @@ class _LoginPageState extends State<LoginPage> {
                         autofocus: true,
                         decoration: InputDecoration(
                             errorText: _errorText
-                                ? _invalidEmailErrorCode
-                                : _emailErrorCode,
+                                ? "Cannot Find user"//'Email entered is not a valid email'
+                                : null,
                             labelText: "Email Address",
                             labelStyle: GoogleFonts.poppins(),
                             border: const OutlineInputBorder(
@@ -157,7 +199,7 @@ class _LoginPageState extends State<LoginPage> {
                             focusColor:
                                 Theme.of(context).colorScheme.inversePrimary,
                             labelText: "Password",
-                            errorText: _passwordErrorCode,
+                            errorText: _passwordError ? 'Wrong password' : null,
                             labelStyle: GoogleFonts.poppins(),
                             suffixIconColor: Colors.black,
                             suffixIcon: IconButton(
@@ -248,29 +290,32 @@ class _LoginPageState extends State<LoginPage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 30.0, vertical: 10),
-                            decoration: BoxDecoration(
-                                border: Border.all(),
-                                borderRadius: BorderRadius.circular(10)),
-                            child: Row(children: [
-                              Image.asset(
-                                "assets/icons8-google-48.png",
-                                height: 15,
-                                width: 15,
-                              ),
-                              const SizedBox(
-                                width: 7.0,
-                              ),
-                              Text(
-                                "Google",
-                                style: GoogleFonts.poppins(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.grey.shade700),
-                              )
-                            ]),
+                          GestureDetector(
+                            onTap: () => signInWithGoogle(),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 35.0, vertical: 10),
+                              decoration: BoxDecoration(
+                                  border: Border.all(),
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: Row(children: [
+                                Image.asset(
+                                  "assets/icons8-google-48.png",
+                                  height: 15,
+                                  width: 15,
+                                ),
+                                const SizedBox(
+                                  width: 7.0,
+                                ),
+                                Text(
+                                  "Google",
+                                  style: GoogleFonts.poppins(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.grey.shade700),
+                                )
+                              ]),
+                            ),
                           ),
                           Container(
                             padding: const EdgeInsets.symmetric(
