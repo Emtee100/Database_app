@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'homepage.dart';
+
 class SignUpForm extends StatefulWidget {
   const SignUpForm({super.key});
 
@@ -48,24 +50,25 @@ class _SignUpFormState extends State<SignUpForm> {
   bool isRepeatPasswordVisible = false;
   bool _weakPassword = false;
   bool emailUsed = false;
-  bool _invalidEmail =false;
-  createUser()async{
-
-    try{
-      UserCredential user =await FirebaseAuth.instance.createUserWithEmailAndPassword(email: _emailController.text, password: _passwordController.text);
-      await FirebaseAuth.instance.signInWithEmailAndPassword(email: _emailController.text, password: _passwordController.text);
-    } on FirebaseAuthException catch(e){
-      if(e.code == 'weak-password'){
-setState(() {
-  _weakPassword = !_weakPassword;
-});
-      }else if(e.code == 'invalid-email'){
-setState(() {
-  _invalidEmail = !_invalidEmail;
-});
+  bool _invalidEmail = false;
+  createUser() async {
+    try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: _emailController.text, password: _passwordController.text);
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: _emailController.text, password: _passwordController.text);
+      //Navigator.push(context, MaterialPageRoute(builder: (context)=> const HomePage()));
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        setState(() {
+          _weakPassword = !_weakPassword;
+        });
+      } else if (e.code == 'invalid-email') {
+        setState(() {
+          _invalidEmail = !_invalidEmail;
+        });
       }
     }
-
   }
 
   @override
@@ -166,7 +169,9 @@ setState(() {
                             keyboardType: TextInputType.emailAddress,
                             style: GoogleFonts.poppins(),
                             decoration: InputDecoration(
-                              errorText: _invalidEmail?'This is an invalid Email':null,
+                                errorText: _invalidEmail
+                                    ? 'This is an invalid Email'
+                                    : null,
                                 focusColor: Theme.of(context)
                                     .colorScheme
                                     .inversePrimary,
@@ -188,17 +193,17 @@ setState(() {
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return "Enter a password";
-                              }
-                              else if(value.length<6){
+                              } else if (value.length < 6) {
                                 return "Password needs to have a minimum of 6 characters";
                               }
                               return null;
                             },
-                            obscureText: isPasswordVisible? false :true,
+                            obscureText: isPasswordVisible ? false : true,
                             style: GoogleFonts.poppins(),
                             decoration: InputDecoration(
-                              errorStyle: GoogleFonts.poppins(),
-                              errorText: _weakPassword?'Weak password':null,
+                                errorStyle: GoogleFonts.poppins(),
+                                errorText:
+                                    _weakPassword ? 'Weak password' : null,
                                 focusColor: Theme.of(context)
                                     .colorScheme
                                     .inversePrimary,
@@ -211,7 +216,10 @@ setState(() {
                                         isPasswordVisible = !isPasswordVisible;
                                       });
                                     },
-                                    icon: isPasswordVisible? const Icon(Icons.visibility_rounded):const Icon(Icons.visibility_off_outlined)),
+                                    icon: isPasswordVisible
+                                        ? const Icon(Icons.visibility_rounded)
+                                        : const Icon(
+                                            Icons.visibility_off_outlined)),
                                 border: const OutlineInputBorder(
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(10)))),
@@ -233,7 +241,7 @@ setState(() {
                               }
                               return null;
                             },
-                            obscureText: isRepeatPasswordVisible? false: true,
+                            obscureText: isRepeatPasswordVisible ? false : true,
                             style: GoogleFonts.poppins(),
                             decoration: InputDecoration(
                                 focusColor: Theme.of(context)
@@ -243,12 +251,16 @@ setState(() {
                                 labelStyle: GoogleFonts.poppins(),
                                 suffixIconColor: Colors.black,
                                 suffixIcon: IconButton(
-                                    onPressed: (){
+                                    onPressed: () {
                                       setState(() {
-                                        isRepeatPasswordVisible = !isRepeatPasswordVisible;
+                                        isRepeatPasswordVisible =
+                                            !isRepeatPasswordVisible;
                                       });
                                     },
-                                    icon: isRepeatPasswordVisible? const Icon(Icons.visibility_rounded):const Icon(Icons.visibility_off_outlined)),
+                                    icon: isRepeatPasswordVisible
+                                        ? const Icon(Icons.visibility_rounded)
+                                        : const Icon(
+                                            Icons.visibility_off_outlined)),
                                 border: const OutlineInputBorder(
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(10)))),

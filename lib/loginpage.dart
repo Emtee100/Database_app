@@ -1,5 +1,6 @@
 // ignore_for_file: camel_case_types
 
+import 'package:database/password_reset.dart';
 import 'package:database/signupPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -221,7 +222,7 @@ class _LoginPageState extends State<LoginPage> {
                     Padding(
                       padding: const EdgeInsets.only(right: 10.0),
                       child: TextButton(
-                          onPressed: () => print("hi"),
+                          onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const PasswordReset())),
                           child: Text(
                             "Forgot Password?",
                             style: GoogleFonts.poppins(
