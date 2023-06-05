@@ -159,6 +159,7 @@ class _LoginPageState extends State<LoginPage> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 20.0, vertical: 15.0),
                       child: TextFormField(
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
                         controller: _emailController,
                         onEditingComplete: () => _loginFocusNode.requestFocus(),
                         validator: (value) {
@@ -185,6 +186,7 @@ class _LoginPageState extends State<LoginPage> {
                       padding: const EdgeInsets.only(
                           left: 20.0, right: 20.0, top: 15.0),
                       child: TextFormField(
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
                         onEditingComplete: () => _loginFocusNode.unfocus(),
                         focusNode: _loginFocusNode,
                         controller: _passwordController,

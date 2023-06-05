@@ -132,6 +132,7 @@ class _SignUpFormState extends State<SignUpForm> {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 20.0, vertical: 15.0),
                           child: TextFormField(
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
                             textCapitalization: TextCapitalization.words,
                             onEditingComplete: () =>
                                 _emailFocusNode.requestFocus(),
@@ -156,6 +157,7 @@ class _SignUpFormState extends State<SignUpForm> {
                           padding: const EdgeInsets.only(
                               left: 20.0, right: 20.0, top: 15.0, bottom: 15.0),
                           child: TextFormField(
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
                             focusNode: _emailFocusNode,
                             onEditingComplete: () =>
                                 _passwordFocusNode.requestFocus(),
@@ -186,6 +188,7 @@ class _SignUpFormState extends State<SignUpForm> {
                           padding: const EdgeInsets.only(
                               left: 20.0, right: 20.0, top: 15.0, bottom: 15.0),
                           child: TextFormField(
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
                             focusNode: _passwordFocusNode,
                             onEditingComplete: () =>
                                 _repeatPasswordFocusNode.requestFocus(),
@@ -229,6 +232,7 @@ class _SignUpFormState extends State<SignUpForm> {
                           padding: const EdgeInsets.only(
                               left: 20.0, right: 20.0, top: 15.0),
                           child: TextFormField(
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
                             focusNode: _repeatPasswordFocusNode,
                             onEditingComplete: () =>
                                 _repeatPasswordFocusNode.unfocus(),

@@ -190,6 +190,7 @@ class _PasswordResetState extends State<PasswordReset> {
                           child: TextFormField(
                             keyboardType: TextInputType.emailAddress,
                             controller: _emailController,
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return "Enter your email";
