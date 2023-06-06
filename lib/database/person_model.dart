@@ -12,4 +12,4 @@ class _person {
 }
 
 final config = Configuration.local([person.schema]);
-final realm = Realm(config);
+final Realm realm = Realm(config);
