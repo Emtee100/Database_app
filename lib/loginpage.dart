@@ -47,6 +47,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<UserCredential> signInWithGoogle() async {
     showDialog(
+      barrierDismissible: false,
         barrierColor: Colors.black26,
         context: context,
         builder: (context) => Center(

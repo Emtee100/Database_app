@@ -14,8 +14,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-   final Person = realm.all <person>();
-   final Person1 = Person[0];
+    final Person = realm.query<person>('emailAddress BEGINSWITH \$0', ['m', 'T']);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -26,30 +25,43 @@ class _HomePageState extends State<HomePage> {
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
       ),
-      body: Column(
-        children: [
-          ElevatedButton(onPressed: (){realm.write(() {
-            realm.add(person(ObjectId(), 'Mark Thomas', 'mt9510037@gmail.com'));
-          },);}, child: Text('Add to realm')),
-  
+      body: Column(children: [
+        ElevatedButton(
+            onPressed: () {
+              realm.write(
+                () {
+                  realm.addAll([
+                    person(ObjectId(), 'Elizabeth Mbonne', 'liz@gmail.com'),
+                    person(ObjectId(), 'William Ruto', 'wruto@gmail.com'),
+                    person(ObjectId(), 'Mark Thomas',
+                        'markthomaskahiga@gmail.com'),
+                    person(ObjectId(), 'Thomas Ngunjiri',
+                        'thomaskahiga@gmail.com'),
 
-const SizedBox(height: 20,),
-
-Container(
-  height: 50,
-  child: ListView.builder(
-    itemCount: Person.length,
-    itemBuilder: (context,index){
-      return ListTile(
-        title: Text(Person1.fullName),
-      );
-    }),
-),
-          Text(""" You're logged in as:
+                  ]);
+                },
+              );
+            },
+            child: const Text('Add to realm')),
+        const SizedBox(
+          height: 20,
+        ),
+        Container(
+          height: 200,
+          child: ListView.builder(
+              itemCount: Person.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(Person[index].fullName),
+                );
+              }),
+        ),
+        Text(""" You're logged in as:
 ${FirebaseAuth.instance.currentUser!.email}"""),
-ElevatedButton(onPressed: ()=>FirebaseAuth.instance.signOut(), child: Text("Sign out"))
-]
-      ),
+        ElevatedButton(
+            onPressed: () => FirebaseAuth.instance.signOut(),
+            child: Text("Sign out"))
+      ]),
     );
   }
 }
