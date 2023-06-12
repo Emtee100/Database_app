@@ -14,7 +14,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    final Person = realm.query<person>('emailAddress BEGINSWITH \$0', ['m', 'T']);
+    final Person = realm.query<person>('emailAddress BEGINSWITH \$0 AND fullName CONTAINS \$1', ['m', 'Mark']);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,

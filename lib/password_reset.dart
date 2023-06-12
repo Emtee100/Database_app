@@ -12,6 +12,7 @@ class PasswordReset extends StatefulWidget {
 class _PasswordResetState extends State<PasswordReset> {
   late GlobalKey<FormState> _passwordReset;
   late TextEditingController _emailController;
+  final _passwordFocusNode = FocusNode();
   String errorText = '';
   bool showErrorText = false;
 
@@ -82,24 +83,35 @@ class _PasswordResetState extends State<PasswordReset> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Text(
-                        'We have sent instructions to reset your password to your email',textAlign: TextAlign.center,
+                        'We have sent instructions to reset your password to your email',
+                        textAlign: TextAlign.center,
                         style: GoogleFonts.poppins(
-                          color: Theme.of(context).colorScheme.onPrimaryContainer,
+                          color:
+                              Theme.of(context).colorScheme.onPrimaryContainer,
                         )),
                   ),
-                      const SizedBox(height: 15,),
-
-                      GestureDetector(
-                        onTap: () => Navigator.pop(context),
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 140, vertical: 15),
-                          decoration: BoxDecoration(
-                            color: const Color.fromARGB(255, 4, 19, 48),
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Text('Done', style: GoogleFonts.poppins(color: Colors.white),),
-                        ),
-                      )
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                      _emailController.clear();
+                      _passwordFocusNode.unfocus();
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 140, vertical: 15),
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 4, 19, 48),
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Text(
+                        'Done',
+                        style: GoogleFonts.poppins(color: Colors.white),
+                      ),
+                    ),
+                  )
                 ],
               ),
             );
@@ -190,7 +202,8 @@ class _PasswordResetState extends State<PasswordReset> {
                           child: TextFormField(
                             keyboardType: TextInputType.emailAddress,
                             controller: _emailController,
-                            autovalidateMode: AutovalidateMode.onUserInteraction,
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return "Enter your email";
@@ -199,6 +212,7 @@ class _PasswordResetState extends State<PasswordReset> {
                             },
                             style: GoogleFonts.poppins(),
                             autofocus: true,
+                            focusNode: _passwordFocusNode,
                             decoration: InputDecoration(
                                 errorText: showErrorText ? errorText : null,
                                 labelText: "Email",
